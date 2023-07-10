@@ -1,0 +1,17 @@
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+
+    font-size: 13px;
+    font-weight: 300;
+}
+
+html, body {
+    height: 100%;
+    background-color: #fafafa;
+}
+
+button {
+    cursor: pointer;
+}

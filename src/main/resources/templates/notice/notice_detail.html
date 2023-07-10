@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 작성</title>
+	<th:block th:replace="/fragments/head"></th:block>
+    <link rel="stylesheet" href="/static/css/notice.css">
+    <link rel="stylesheet" href="/static/css/notice-detail.css">
+</head>
+<body>
+	<th:block th:replace="/fragments/header"></th:block>
+
+    <main>
+        <article>
+            <section class="notice-detail-header">
+                <h1 class="notice-detail-title">스프링 부트 공지사항 게시글 테스트</h1>
+                <div class="notice-detail-description">
+                    <h3>작성자: sanghyun</h3>
+                    <h3>작성일: 2023-07-03 21:38:55</h3>
+                    <h3>조회수: 1000</h3>
+                </div>
+            </section>
+            <section class="notice-content">
+                <p><span style="font-family: 궁서, Gungsuh, GungSeo; font-size: 24pt;"><b><span style="color: rgb(58, 50, 195);">가나다</span>라마바사</b></span></p><p><span style="font-family: 돋움, Dotum; font-size: 24pt;">아자차<span style="color: rgb(81, 143, 187);">카타파하로딩이 완료된 후에 본문에 삽입되는 text 입니다.</span></span></p>
+            </section>
+            <section class="notice-file">
+                <h3>첨부파일</h3>
+                <a href="#">notice.jpg</a> / <a href="#">aaa.png</a>
+            </section>
+            <div class="detail-buttons">
+                <div class="page-buttons"> 
+                    <button type="button" class="page-button prev">이전</button>
+                    <button type="button" class="page-button next">다음</button>
+                </div>
+                <div>
+                    <button type="button" class="detail-button modify">수정</button>
+                    <button type="button" class="detail-button delete">삭제</button>
+                    <button type="button" class="detail-button list">목록</button>
+                </div>
+            </div>
+        </article>
+    </main>
+	<script type="text/javascript" src="/static/js/notice/notice-detail.js"></script>
+</body>
+</html>

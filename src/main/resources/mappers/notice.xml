@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.study.security_sanghyun.domain.notice.NoticeRepository">
+	<insert id="saveNotice" parameterType="com.study.security_sanghyun.domain.notice.Notice" useGeneratedKeys="true" keyProperty="notice_code">
+		insert into
+			notice_mst
+		values(
+			0,
+			#{notice_title},
+			#{user_code},
+			#{notice_content},
+			#{notice_count},
+			now(),
+			now()
+		);
+	</insert>
+	
+	<insert id="saveNoticeFiles" parameterType="java.util.List">
+		insert into
+			notice_file
+		values
+		<foreach collection="list" item="file" separator=",">
+			(
+				0,
+				#{file.notice_code},
+				#{file.file_name},
+				now(),
+				now()
+			)
+		</foreach>
+	</insert>
+	
+	<select id="getNotice" parameterType="hashmap" resultType="com.study.security_sanghyun.domain.notice.Notice">
+		SELECT 
+			nm.notice_code,
+			nm.notice_title,
+			nm.user_code,
+			um.user_id,
+			nm.notice_content,
+			nf.file_code,
+			nf.file_name,
+			nm.create_date
+		FROM
+			notice_mst nm
+			LEFT OUTER JOIN user_mst2 um ON(um.user_code = nm.user_code)
+			LEFT OUTER JOIN notice_file nf ON(nf.notice_code = nm.notice_code)
+		WHERE
+		<choose>
+			<when test='flag == null'>
+				nm.notice_code = #{notice_code}
+			</when>
+			
+			<when test='flag.euqals("prev")'>
+				nm.notice_code = (
+					select
+						max(notice_code)
+					from
+						notice_mst
+					where
+						notice_code &lt; #{notice_code}
+				)
+			</when>
+			<otherwise>
+				nm.notice_code = (
+					select
+						min(notice_code)
+					from
+						notice_mst
+					where
+						notice_code &gt; #{notice_code}
+				)
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getNoticeList" parameterType="hashmap" resultType="com.study.security_sanghyun.domain.notice.Notice">
+		select
+			nm.notice_code,
+			nm.notice_title,
+			um.user_id,
+			nm.create_date,
+			nm.notice_count,
+			(select
+				count(*)
+			from
+				notice_mst nm
+				left outer join user_mst2 um on(um.user_code = nm.user_code)
+			<choose>
+				<when test='serach_flag == "title"'>
+					where
+						nm.notice_title like concat('%', #{search_value}, '%')
+				</when>
+				<when test='serach_flag == "titleAndContent"'>
+					where
+						nm.notice_title liki concat('%', #{search_value}, '%')
+						or nm.notice_content like concat('%', #{search_value}, '%')
+				</when>
+				<when test='serach_flag == "writer"'>
+					where
+						um.user_id like concat('%', #{search_value}, '%')
+				</when>
+				
+			</choose>
+			) as total_notice_count
+		from
+			notice_mst nm
+			left outer join user_mst2 um on(um.user_code = nm.user_code)
+		<choose>
+			<when test='serach_flag == "title"'>
+				where
+					nm.notice_title like concat('%', #{search_value}, '%')
+			</when>
+			<when test='serach_flag == "titleAndContent"'>
+				where
+					nm.notice_title liki concat('%', #{search_value}, '%')
+					or nm.notice_content like concat('%', #{search_value}, '%')
+			</when>
+			<when test='serach_flag == "writer"'>
+				where
+					um.user_id like concat('%', #{search_value}, '%')
+			</when>
+		</choose>
+		order by
+			nm.notice_code desc
+		limit #{index}, 10
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

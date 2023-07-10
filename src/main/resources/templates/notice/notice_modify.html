@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 수정</title>
+	<th:block th:replace="/fragments/head"></th:block>
+    <link rel="stylesheet" href="/static/css/notice.css">
+    <link rel="stylesheet" href="/static/css/notice-modify.css">
+    <script src="/static/js/service/HuskyEZCreator.js"></script>
+</head>
+<body>
+    <th:block th:replace="/fragments/header"></th:block>
+
+    <main>
+        <div class="notice-header">
+            <h1 class="menu-title">글 수정</h1>
+        </div>
+        <article>
+            <form enctype="multipart/form-data">
+                <table class="notice-list">
+                    <tr class="notice-row">
+                        <th>제목</th>
+                        <td><input type="text" class="notice-title" name="noticeTitle"></td>
+                    </tr>
+                    <tr class="notice-row">
+                        <td colspan="2">
+                            <input type="file" class="notice-file" name="file"> 
+                        </td>
+                    </tr>
+                    <tr class="notice-row">
+                        <td colspan="2">
+                            <textarea name="ir1" id="ir1" style="width: 100%; height: 500px;">test</textarea>
+                        </td>
+                    </tr>
+                    <tr class="notice-row">
+                        <td colspan="2">
+                            <div class="notice-submit">
+                                <button type="button" class="notice-button submit">수정하기</button>
+                                <button type="button" class="notice-button cancel">취소하기</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </article>
+    </main>
+    <script type="text/javascript">
+        let oEditors = [];
+        nhn.husky.EZCreator.createInIFrame({
+         oAppRef: oEditors,
+         elPlaceHolder: "ir1",
+         sSkinURI: "/static/SmartEditor2Skin.html",
+         fCreator: "createSEditor2",
+         fOnAppLoad : () => {
+            oEditors.getById["ir1"].exec("PASTE_HTML", ["유저가 작성한 n번글"]);
+         }
+        });
+
+        const submitButton = document.querySelector(".submit");
+
+        submitButton.onclick = () => {
+            oEditors.getById["ir1"].exec("PASTE_HTML", ["로딩이 완료된 후에 본문에 삽입되는 text 입니다."]);
+            oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
+
+            const textareaValue = document.querySelector("#ir1").value;
+            alert(textareaValue);
+        
+        }
+
+
+
+    </script>
+</body>
+</html>
